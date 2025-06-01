@@ -34,14 +34,19 @@ public class ExplorerSearch {
         // Implement your method here!
         // Please also make more test cases
         // I STRONGLY RECOMMEND testing some helpers you might make too
-        return -1;
+        int[] start = findStart(island);
+        boolean[][] visited = new boolean[island.length][island[0].length];
+
+
+        return reachableArea(island, 1, start, visited);
     }
 
     public static int reachableArea(int[][] island, int area, int[] current, boolean[][] visited) {
         if(visited[current[0]][current[1]] || current[0] < 0 || current [1] < 0 || current[0] > island.length || current[1] > island[0].length) return 0;
         Set<int[]> reachable = getReachable(island, current, visited);
         for(int[] coordinate: reachable){
-            area += reachableArea(island, area, coordinate, visited);
+
+            area += reachableArea(island, area, coordinate, visited)+1;
         }
         return area;
     }
@@ -80,7 +85,18 @@ public class ExplorerSearch {
         return reachable;
     }
 
-
+    public static int[] findStart(int[][] island){
+         for(int r=0; r<island.length; r++){
+            for(int c=0; c<island[r].length; c++){
+                if(island[r][c] == 0){
+                    //found
+                    int[] location = new int[]{r,c};
+                    return location;
+                }
+            }
+        }
+        throw new IllegalArgumentException("find start error");
+    }
 
 
 
