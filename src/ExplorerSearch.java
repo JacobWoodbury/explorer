@@ -34,4 +34,16 @@ public class ExplorerSearch {
         // I STRONGLY RECOMMEND testing some helpers you might make too
         return -1;
     }
+
+    public static void getTerrain(){
+        
+    }
+
+
+
+
+
+
+
+
 }
