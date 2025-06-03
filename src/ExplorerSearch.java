@@ -5,6 +5,7 @@ import java.util.Set;
 
 public class ExplorerSearch {
 
+    private static final int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
     /**
      * Returns how much land area an explorer can reach on a rectangular island.
      * 
@@ -35,56 +36,31 @@ public class ExplorerSearch {
         // Please also make more test cases
         // I STRONGLY RECOMMEND testing some helpers you might make too
         int[] start = findStart(island);
-        boolean[][] visited = new boolean[island.length][island[0].length];
 
-
-        return reachableArea(island, 1, start, visited);
+        return reachableArea(island, start);
     }
 
-    public static int reachableArea(int[][] island, int area, int[] current, boolean[][] visited) {
-        if(visited[current[0]][current[1]] || current[0] < 0 || current [1] < 0 || current[0] > island.length || current[1] > island[0].length) return 0;
-        Set<int[]> reachable = getReachable(island, current, visited);
-        for(int[] coordinate: reachable){
-
-            area += reachableArea(island, area, coordinate, visited)+1;
-        }
-        return area;
-    }
-
-    public static Set<int[]> getReachable(int[][] island, int[] current, boolean[][] visited){
-        Set<int[]> reachable = new HashSet<>();
-        int r = current[0];
+    public static int reachableArea(int[][] island, int[] current) {
+         int r = current[0];
         int c = current[1];
-       
         
-        //up 
-        int newR = r -1;
-        int newC = c;
-        if(newR>=0 && island[newR][newC] == 1){
-            reachable.add(new int[] {newR, newC});
-        }
-        //down
-        newR = r +1;
-        newC = c;
-        if(newR< island.length && island[newR][newC] == 1){
-            reachable.add(new int[] {newR, newC});
-        }
-        //left
-        newR = r;
-        newC = c -1;
-        if(newC >= 0 && island[newR][newC] == 1){
-            reachable.add(new int[] {newR, newC});
-        }
-        //right
-        newR = r;
-        newC = c +1;
-        if(newC < island[newR].length && island[newR][newC] == 1){
-            reachable.add(new int[] {newR, newC});
+        if(r < 0 || c < 0 || r >= island.length || c >= island[0].length || island[r][c] > 1) return 0;
+        
+       
+        island[r][c] = 2;
+        int area = 1;
+        
+        for(int[] dir: directions){
+            int[] coordinate = {r+dir[0], c+dir[1]};
+            area+= reachableArea(island, coordinate);
         }
 
-        return reachable;
+        return area;
+
     }
 
+
+    // working
     public static int[] findStart(int[][] island){
          for(int r=0; r<island.length; r++){
             for(int c=0; c<island[r].length; c++){
@@ -95,7 +71,7 @@ public class ExplorerSearch {
                 }
             }
         }
-        throw new IllegalArgumentException("find start error");
+        throw new IllegalArgumentException("find start error"); 
     }
 
 
